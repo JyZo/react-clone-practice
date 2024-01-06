@@ -1,0 +1,71 @@
+.header{
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background-color: #131921;
+    position: sticky;       //위에 고정시키는 속성
+    top: 0;
+    z-index: 100;
+}
+
+.header_logo {
+    width: 100px;
+    object-fit: contain;       //이미지같은걸 부모컨테이너 크기에 딱 맞출때 씀, contain - 비율이 맞춰짐
+    margin: 0 20px ;
+    margin-top: 10px;
+}
+
+.header_search{
+    display: flex;
+    flex: 1;
+    align-items: center;
+    border-radius: 20px;
+}
+
+.header_searchInput{
+    height: 12px;
+    padding: 10px;
+    border: none;
+    width: 100%;
+}
+
+.header_searchIcon{
+    background-color: #cd9042;
+    padding: 5px;
+    height: 15px;
+}
+
+.header_option{
+    display: flex;
+    flex-direction: column;             //배치 방식 변경
+    margin-left: 10px;
+    color: white;
+}
+
+.header_nav{
+    display: flex;
+    justify-content: space-evenly;      //하위 콘텐츠 항목의 공간분배
+}
+
+.header_optionLineOne{
+    font-size: 10px;
+
+}
+
+.header_optionLineTwo{
+    font-size: 13px;
+    font-weight: 800;       //가중치나 비율
+    margin-top: 3px;
+}
+
+.header_optionBasket{
+    display: flex;
+    align-items: center;
+    color: white;
+
+}
+
+.header_optionLineTwoheader_basketCount{
+    margin-right: 10px;
+    margin-left: 10px;
+}

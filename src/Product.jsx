@@ -21,7 +21,6 @@ const addToBasket = () =>{
     })
 }
 
-console.log(basket);
 
 
     return (

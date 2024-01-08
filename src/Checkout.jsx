@@ -6,14 +6,16 @@ import { useStateValue } from './StateProvider';
 
 const Checkout = () => {
 
-    const [{basket}, dispatch] = useStateValue();
+    const [{basket, user}, dispatch] = useStateValue();
 
     return (
         <div className='checkout'>
             <div className='checkout_left'>
                 <img className="checkout_ad" src="https://opgg-gnb.akamaized.net/static/images/banners/970 x 92.png?image=q_auto,f_webp,w_1940,h_180&v=1702977255104"alt=""/>
 
-                <h1 className='checkout_title'> 장바구니</h1>
+                <h1 className='checkout_title'> 
+                {user?.email}의 장바구니 입니다.
+                </h1>
 
                 {basket.map(item => (
                              // eslint-disable-next-line react/jsx-key

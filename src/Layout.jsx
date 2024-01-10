@@ -2,12 +2,15 @@ import React from 'react';
 import './Layout.scss';
 import Header from './Header';
 import { Outlet } from 'react-router-dom';
+import { Elements } from '@stripe/react-stripe-js';
 
-const Layout = () => {
+const Layout = ({stripe}) => {
   return (
     <>
       <Header />
-      <Outlet />
+      <Elements stripe={stripe}>
+        <Outlet />
+      </Elements>
     </>
   );
 };

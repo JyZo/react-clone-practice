@@ -5,11 +5,10 @@ import { useStateValue } from './StateProvider';
 // eslint-disable-next-line react/prop-types
 const Product = ({id, title, image, price, rating}) => {
 
-    const [{ basket }, dispatchEvent] = useStateValue();
+    const [{basket},dispatch] = useStateValue();
 
 const addToBasket = () =>{
-     
-    dispatchEvent({
+    dispatch({
         type: 'ADD_TO_BASKET',
         item: {
             id:id,
@@ -20,7 +19,6 @@ const addToBasket = () =>{
         }
     })
 }
-
 
 
     return (

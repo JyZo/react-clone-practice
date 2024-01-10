@@ -1,0 +1,143 @@
+import React, { useEffect } from 'react';
+import './Payment.scss';
+import { useStateValue } from './StateProvider';
+import { Link, useNavigate } from 'react-router-dom';
+import CheckoutProduct from './CheckoutProduct';
+import CurrencyFormat from 'react-currency-format';
+import { getBasketTotal } from './Reducer';
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import { useState } from 'react';
+import axios from 'axios';
+axios;
+
+const Payment = () => {
+  const [{ basket, user }, dispatch] = useStateValue();
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [disable, setDisable] = useState(true);
+  const [processing, setProcessing] = useState('');
+  const [succeeded, setSucceeded] = useState(false);
+
+  const [clientSecret, setClientSecret] = useState(true);
+
+  const stripe = useStripe();
+  const elements = useElements(true);
+
+  useEffect(() => {
+    const getClientSecret = async () => {
+      const response = await axios({
+        method: 'post',
+        url: '/payments/create?total=' + getBasketTotal(basket) * 100,
+      });
+      setClientSecret(response.data.clientSecret);
+    };
+
+    getClientSecret(); //한번 더 실행해야 cleintsecret을 가져옴 위에서 set해주니까
+  }, [basket]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setProcessing(true); //결제중 글자관련 세팅
+
+    const payload = await stripe
+      .confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement),
+        },
+      })
+      .then(({ paymentIntent }) => {
+        setSucceeded(true);
+        setError(null);
+        setProcessing(false);
+
+        navigate('/orders');
+      });
+  };
+
+  const handleChange = (e) => {
+    setDisable(e.empty);
+    setError(e.error ? e.error.message : '');
+  };
+
+  return (
+    <div className="payment">
+      <div className="payment_container">
+        <Link to="/checkout" className="checkoutlink">
+          <h1>
+            장바구니 돌아가기 ({basket?.length} 개의 상품목록이 존재합니다. )
+          </h1>
+        </Link>
+
+        <div className="payment_section">
+          <div className="payment_title">
+            <h1>배달 받을 곳</h1>
+          </div>
+          <div className="payment_address">
+            <p>{user?.email} 의 주소</p>
+            <p>강원도</p>
+            <p>철원</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="payment_section">
+        <div className="payment_title">
+          <h1>상품 목록</h1>
+        </div>
+        <div className="payment_items">
+          {basket.map((item) => (
+            // eslint-disable-next-line react/jsx-key
+            <CheckoutProduct
+              id={item.id}
+              title={item.title}
+              image={item.image}
+              price={item.price}
+              rating={item.rating}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="payment_section">
+        <div className="payment_title">
+          <h1> 결제 </h1>
+        </div>
+
+        <div className="payment_details">
+          <form onSubmit={handleSubmit}>
+            <CardElement onChange={handleChange} />
+
+            <div className="payment_priceContainer">
+              <CurrencyFormat
+                renderText={(value) => (
+                  <>
+                    <p>
+                      총액({basket?.length} 개) : <strong> {value} 원</strong>
+                    </p>
+                    <small className="subtatla_gift">
+                      <input type="checkbox" />
+                      체크박스 입니다
+                    </small>
+                  </>
+                )}
+                decimalScale={2}
+                value={getBasketTotal(basket)}
+                displayType={'text'}
+                thousandSeparator={true}
+                prefix="₩"
+              />
+
+              <button disabled={processing || disable || succeeded}>
+                <span>{processing ? <p>결제중입니다.</p> : '결제하기'}</span>
+              </button>
+            </div>
+
+            {error && <div>{error}</div>}
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Payment;

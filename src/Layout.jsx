@@ -4,7 +4,7 @@ import Header from './Header';
 import { Outlet } from 'react-router-dom';
 import { Elements } from '@stripe/react-stripe-js';
 
-const Layout = ({stripe}) => {
+const Layout = ({ stripe }) => {
   return (
     <>
       <Header />

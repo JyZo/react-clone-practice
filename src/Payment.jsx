@@ -7,8 +7,7 @@ import CurrencyFormat from 'react-currency-format';
 import { getBasketTotal } from './Reducer';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useState } from 'react';
-import axios from 'axios';
-axios;
+import axios from './axios';
 
 const Payment = () => {
   const [{ basket, user }, dispatch] = useStateValue();
@@ -32,8 +31,10 @@ const Payment = () => {
       setClientSecret(response.data.clientSecret);
     };
 
-    getClientSecret(); //한번 더 실행해야 cleintsecret을 가져옴 위에서 set해주니까
+    getClientSecret();
   }, [basket]);
+
+  console.log('client 비밀은 다음과 같아요', clientSecret);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

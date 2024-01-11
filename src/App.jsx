@@ -11,7 +11,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 
 const promise = loadStripe(
-  'pk_test_51OX6lfEIuGUBwrn0dlJWmRVS741wUyjVkNz37Q5L68Xu5N0XruQoumUtHO2SmzrdY6gfNio3V0l0e0ZHY6yXKpJs00vGlr1xbc',
+  'sk_test_51OX6lfEIuGUBwrn0JTDQPn2BvZqoKrw1TGn5B7q4cZwLJy69bKSo5PiisNrCHZLM9xqf5KSLlFsFH8m904soe0Wu003h1IyknK',
 );
 
 // import './App.scss'
@@ -37,10 +37,10 @@ function App() {
 
   return (
     <Routes>
-      <Route element={<Layout stripe={loadStripe(promise)} />}>
+      <Route element={<Layout stripe={promise} />}>
         <Route index element={<Home />} />
         <Route path="/checkout" element={<Checkout />} />
-        <Route path="/payment" element={<Payment />} />
+        <Route path="/payment" element={<Payment stripe={promise} />} />
       </Route>
       <Route path="/login" element={<Login />} />
     </Routes>

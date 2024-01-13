@@ -5,6 +5,7 @@ import { Outlet } from 'react-router-dom';
 import { Elements } from '@stripe/react-stripe-js';
 
 const Layout = ({ stripe }) => {
+  console.log(stripe);
   return (
     <>
       <Header />

@@ -51,3 +51,8 @@
     border-color: #a5a5f3 #8768bf #61dafb;
     color: #111111;
 }
+
+.payment_details > form > div > button:disabled {
+    opacity: 0.2;
+    cursor:not-allowed;
+}

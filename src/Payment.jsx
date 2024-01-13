@@ -8,6 +8,7 @@ import { getBasketTotal } from './Reducer';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useState } from 'react';
 import axios from './axios';
+import { db } from './firebase';
 
 const Payment = () => {
   const [{ basket, user }, dispatch] = useStateValue();
@@ -20,7 +21,7 @@ const Payment = () => {
   const [clientSecret, setClientSecret] = useState(true);
 
   const stripe = useStripe();
-  const elements = useElements(true);
+  const elements = useElements();
 
   useEffect(() => {
     const getClientSecret = async () => {
@@ -47,14 +48,31 @@ const Payment = () => {
         },
       })
       .then(({ paymentIntent }) => {
+        // paymentIntent = payment 확인 및 정보
+
+        db.collection('users')
+          .doc(user?.uid)
+          .collection('orders')
+          .doc(paymentIntent.id)
+          .set({
+            basket: basket,
+            amount: paymentIntent.amount,
+            created: paymentIntent.created,
+          });
+
         setSucceeded(true);
         setError(null);
         setProcessing(false);
 
+        // 딜레이가 생겻을때 버튼이 비활성화 된다. 하지만 너무 빨리 넘어가서 확인이 불가능
+
+        dispatch({
+          type: 'EMPTY_BASKET',
+        });
+
         navigate('/orders');
       });
   };
-
   const handleChange = (e) => {
     setDisable(e.empty);
     setError(e.error ? e.error.message : '');
